@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# PredictAlpha Demo Script
+# PP-Alpha-Agent Demo Script
 # 用于演示视频录制
 
 echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║              PredictAlpha Demo                            ║"
+echo "║              PP-Alpha-Agent Demo                          ║"
 echo "║         Prediction-Powered Trading Agent                  ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo ""

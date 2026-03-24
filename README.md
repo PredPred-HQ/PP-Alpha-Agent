@@ -1,4 +1,4 @@
-# PredictAlpha - Prediction-Powered Trading Agent
+# PP-Alpha-Agent - Prediction-Powered Trading Agent
 
 > 🏆 OKX AI Song Hackathon 2026 参赛作品
 
@@ -6,11 +6,11 @@
 
 ## 核心理念
 
-预测市场是"群体智慧"的最佳体现 —— 当数百万美元的真金白银押注在某个事件上时，其价格本身就是最准确的概率预测。PredictAlpha 将这种群体智慧转化为可执行的交易信号。
+预测市场是"群体智慧"的最佳体现 —— 当数百万美元的真金白银押注在某个事件上时，其价格本身就是最准确的概率预测。PP-Alpha-Agent 将这种群体智慧转化为可执行的交易信号。
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      PredictAlpha                           │
+│                      PP-Alpha-Agent                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐  │
@@ -54,8 +54,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-repo/predict-alpha.git
-cd predict-alpha
+git clone https://github.com/your-repo/pp-alpha-agent.git
+cd pp-alpha-agent
 
 # 安装依赖
 npm install
@@ -124,7 +124,7 @@ Agent 行动：
 ## 项目结构
 
 ```
-predict-alpha/
+pp-alpha-agent/
 ├── src/
 │   ├── polymarket/      # Polymarket API 客户端
 │   ├── okx/             # OKX Agent Trade Kit 集成

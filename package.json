@@ -1,7 +1,7 @@
 {
-  "name": "predict-alpha",
+  "name": "pp-alpha-agent",
   "version": "1.0.0",
-  "description": "Prediction-Powered Trading Agent for OKX AI Hackathon",
+  "description": "PP-Alpha-Agent - Prediction-Powered Trading Agent for OKX AI Hackathon",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

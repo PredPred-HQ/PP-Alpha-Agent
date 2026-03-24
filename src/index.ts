@@ -1,10 +1,10 @@
 /**
- * PredictAlpha - Prediction-Powered Trading Agent
+ * PP-Alpha-Agent - Prediction-Powered Trading Agent
  * OKX AI Song Hackathon 2026
  */
 
 import 'dotenv/config';
-import { PredictAlphaAgent, AgentConfig } from './agent/core.js';
+import { PPAlphaAgent, AgentConfig } from './agent/core.js';
 import { PolymarketClient } from './polymarket/client.js';
 import { SignalGenerator } from './polymarket/signals.js';
 
@@ -43,19 +43,18 @@ const config: AgentConfig = {
 console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║   ██████╗ ██████╗ ███████╗██████╗ ██╗ ██████╗████████╗   ║
-║   ██╔══██╗██╔══██╗██╔════╝██╔══██╗██║██╔════╝╚══██╔══╝   ║
-║   ██████╔╝██████╔╝█████╗  ██║  ██║██║██║        ██║      ║
-║   ██╔═══╝ ██╔══██╗██╔══╝  ██║  ██║██║██║        ██║      ║
-║   ██║     ██║  ██║███████╗██████╔╝██║╚██████╗   ██║      ║
-║   ╚═╝     ╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝ ╚═════╝   ╚═╝      ║
+║   PPPP  PPPP      -Alpha-       AAAAA  GGGGG  EEEEE  N   N ║
+║   P   P P   P     -Agent-      A   A G       E      NN  N ║
+║   P   P P   P                AAAAAAA G  GGG  EEEE   N N N ║
+║   PPPP  PPPP               A       A G   G   E      N  NN ║
+║   P     P                 A         A  GGGG  EEEEE  N   N ║
+║   P     P                                                    ║
 ║                                                           ║
-║         █████╗ ██╗     ██████╗ ██╗  ██╗ █████╗            ║
-║        ██╔══██╗██║     ██╔══██╗██║  ██║██╔══██╗           ║
-║        ███████║██║     ██████╔╝███████║███████║           ║
-║        ██╔══██║██║     ██╔═══╝ ██╔══██║██╔══██║           ║
-║        ██║  ██║███████╗██║     ██║  ██║██║  ██║           ║
-║        ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝           ║
+║         AAAAA  IIIII  GGGGG  EEEEE  N   N  TTTTT           ║
+║        A   A    I   G       E      NN  N    T             ║
+║        AAAAAAA   I   G  GGG  EEEE   N N N    T             ║
+║        A       A  I   G   G   E      N  NN    T             ║
+║        A         A III  GGGG  EEEEE  N   N    T             ║
 ║                                                           ║
 ║   Prediction-Powered Trading Agent                        ║
 ║   OKX AI Song Hackathon 2026                              ║
@@ -97,7 +96,7 @@ async function runTradingMode() {
   console.log('[Main] Starting in TRADING mode');
   console.log('[Main] ⚠️  Real trades will be executed!\n');
 
-  const agent = new PredictAlphaAgent(config);
+  const agent = new PPAlphaAgent(config);
 
   // 优雅退出
   process.on('SIGINT', async () => {
@@ -116,7 +115,7 @@ async function runMonitorMode() {
   console.log('[Main] Starting in MONITOR mode');
   console.log('[Main] No trades will be executed\n');
 
-  const agent = new PredictAlphaAgent(config);
+  const agent = new PPAlphaAgent(config);
   await agent.monitor();
 }
 

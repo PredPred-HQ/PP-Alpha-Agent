@@ -1,5 +1,5 @@
 /**
- * PredictAlpha Agent Core
+ * PP-Alpha-Agent Core
  * AI 驱动的预测交易代理核心逻辑
  */
 
@@ -37,7 +37,7 @@ export interface TradeDecision {
   };
 }
 
-export class PredictAlphaAgent {
+export class PPAlphaAgent {
   private anthropic: Anthropic;
   private polymarket: PolymarketClient;
   private signalGenerator: SignalGenerator;
@@ -60,7 +60,7 @@ export class PredictAlphaAgent {
    * 启动 Agent
    */
   async start(): Promise<void> {
-    console.log('[Agent] Starting PredictAlpha Agent...');
+    console.log('[Agent] Starting PP-Alpha-Agent...');
 
     await this.okx.connect();
     this.isRunning = true;
