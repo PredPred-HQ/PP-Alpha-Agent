@@ -10,6 +10,7 @@ import { OKXMCPClient, OKXConfig } from '../okx/mcp-client.js';
 
 export interface AgentConfig {
   anthropicApiKey: string;
+  anthropicBaseUrl?: string;
   okxConfig: OKXConfig;
   maxPositionSizeUSD: number;
   maxLeverage: number;
@@ -45,7 +46,10 @@ export class PredictAlphaAgent {
 
   constructor(config: AgentConfig) {
     this.config = config;
-    this.anthropic = new Anthropic({ apiKey: config.anthropicApiKey });
+    this.anthropic = new Anthropic({
+      apiKey: config.anthropicApiKey,
+      baseURL: config.anthropicBaseUrl,
+    });
     this.polymarket = new PolymarketClient();
     this.signalGenerator = new SignalGenerator(this.polymarket);
     this.okx = new OKXMCPClient(config.okxConfig);

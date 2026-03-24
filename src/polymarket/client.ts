@@ -3,7 +3,33 @@
  * 获取预测市场数据
  */
 
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
+import { getSimulatedEvents, MOCK_EVENTS } from './mock-data.js';
+
+// Retry helper
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  retries = 3,
+  delay = 2000
+): Promise<T> {
+  let lastError: Error | undefined;
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+      const isTimeout = (error as AxiosError).code === 'ECONNABORTED';
+      const isNetworkError = (error as AxiosError).code === 'ENOTFOUND';
+
+      if (i < retries - 1 && (isTimeout || isNetworkError)) {
+        console.log(`[Polymarket] Retry ${i + 1}/${retries} after ${delay}ms...`);
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 1.5; // exponential backoff
+      }
+    }
+  }
+  throw lastError;
+}
 
 // Types
 export interface PolymarketEvent {
@@ -63,22 +89,36 @@ export interface OrderBookLevel {
 export class PolymarketClient {
   private gammaApi: AxiosInstance;
   private clobApi: AxiosInstance;
+  private useMockData: boolean;
 
   constructor(
     gammaUrl = 'https://gamma-api.polymarket.com',
-    clobUrl = 'https://clob.polymarket.com'
+    clobUrl = 'https://clob.polymarket.com',
+    useMockData = false
   ) {
+    this.useMockData = useMockData || process.env.USE_MOCK_DATA === 'true';
+
     this.gammaApi = axios.create({
       baseURL: gammaUrl,
-      timeout: 15000,
-      headers: { 'Content-Type': 'application/json' },
+      timeout: 60000, // 60 seconds
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
     });
 
     this.clobApi = axios.create({
       baseURL: clobUrl,
-      timeout: 15000,
-      headers: { 'Content-Type': 'application/json' },
+      timeout: 60000, // 60 seconds
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
     });
+
+    if (this.useMockData) {
+      console.log('[Polymarket] Using mock data mode');
+    }
   }
 
   /**
@@ -91,6 +131,24 @@ export class PolymarketClient {
     tag?: string;
     liquidityMin?: number;
   } = {}): Promise<PolymarketEvent[]> {
+    // 使用模拟数据
+    if (this.useMockData) {
+      console.log('[Polymarket] Returning mock events');
+      let events = getSimulatedEvents();
+
+      if (options.closed === false) {
+        events = events.filter(e => !e.closed);
+      }
+      if (options.liquidityMin) {
+        events = events.filter(e => e.liquidity >= options.liquidityMin!);
+      }
+      if (options.limit) {
+        events = events.slice(0, options.limit);
+      }
+      return events;
+    }
+
+    // 真实 API 调用
     const params = new URLSearchParams();
     params.set('order', 'id');
     params.set('ascending', 'false');
@@ -107,8 +165,10 @@ export class PolymarketClient {
       params.set('liquidity_min', String(options.liquidityMin));
     }
 
-    const response = await this.gammaApi.get(`/events?${params.toString()}`);
-    return response.data;
+    return withRetry(async () => {
+      const response = await this.gammaApi.get(`/events?${params.toString()}`);
+      return response.data;
+    });
   }
 
   /**

@@ -23,11 +23,12 @@ function getEnvOrThrow(key: string): string {
 
 // 配置
 const config: AgentConfig = {
-  anthropicApiKey: getEnvOrThrow('ANTHROPIC_API_KEY'),
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
+  anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL,
   okxConfig: {
-    apiKey: getEnvOrThrow('OKX_API_KEY'),
-    secretKey: getEnvOrThrow('OKX_SECRET_KEY'),
-    passphrase: getEnvOrThrow('OKX_PASSPHRASE'),
+    apiKey: process.env.OKX_API_KEY || '',
+    secretKey: process.env.OKX_SECRET_KEY || '',
+    passphrase: process.env.OKX_PASSPHRASE || '',
     simulated: process.env.OKX_SIMULATED === 'true',
   },
   maxPositionSizeUSD: parseInt(process.env.MAX_POSITION_SIZE_USD || '1000'),
