@@ -11,6 +11,7 @@ import { OKXMCPClient, OKXConfig } from '../okx/mcp-client.js';
 export interface AgentConfig {
   anthropicApiKey: string;
   anthropicBaseUrl?: string;
+  anthropicModel?: string;
   okxConfig: OKXConfig;
   maxPositionSizeUSD: number;
   maxLeverage: number;
@@ -177,7 +178,7 @@ export class PredictAlphaAgent {
 `;
 
     const response = await this.anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: this.config.anthropicModel || 'claude-sonnet-4-5-20250929',
       max_tokens: 1024,
       messages: [{ role: 'user', content: prompt }],
     });

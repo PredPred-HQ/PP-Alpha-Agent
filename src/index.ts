@@ -25,6 +25,7 @@ function getEnvOrThrow(key: string): string {
 const config: AgentConfig = {
   anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
   anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL,
+  anthropicModel: process.env.ANTHROPIC_MODEL,
   okxConfig: {
     apiKey: process.env.OKX_API_KEY || '',
     secretKey: process.env.OKX_SECRET_KEY || '',
