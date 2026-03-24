@@ -11,6 +11,7 @@
     "backtest": "tsx src/index.ts --mode=backtest",
     "dev": "tsx watch src/index.ts",
     "test": "vitest",
+    "test:trade": "tsx scripts/test-trade.ts",
     "lint": "eslint src/"
   },
   "dependencies": {
