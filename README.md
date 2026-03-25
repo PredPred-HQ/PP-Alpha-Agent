@@ -49,20 +49,27 @@
 - Node.js >= 18
 - Python >= 3.10
 - OKX API 密钥
+- Anthropic API 密钥
 
 ### 安装
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-repo/pp-alpha-agent.git
-cd pp-alpha-agent
+git clone https://github.com/PredPred-HQ/PP-Alpha-Agent.git
+cd PP-Alpha-Agent
 
 # 安装依赖
 npm install
 
 # 配置环境变量
 cp .env.example .env
-# 编辑 .env 填入你的 OKX API 密钥
+# 编辑 .env 填入你的 OKX API 密钥和 Anthropic API 配置
+OKX_API_KEY=your_api_key
+OKX_SECRET_KEY=your_secret_key
+OKX_PASSPHRASE=your_passphrase
+ANTHROPIC_API_KEY=your_anthropic_api_key
+ANTHROPIC_BASE_URL=https://api.anthropic.com  # Optional: custom API endpoint
+ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 ```
 
 ### 配置
@@ -75,6 +82,10 @@ OKX_PASSPHRASE=your_passphrase
 
 # 可选：模拟交易模式
 OKX_SIMULATED=true
+
+ANTHROPIC_API_KEY=your_anthropic_api_key
+ANTHROPIC_BASE_URL=https://api.anthropic.com  # Optional: custom API endpoint
+ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 ```
 
 ### 运行
