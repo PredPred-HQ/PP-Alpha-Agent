@@ -188,7 +188,7 @@ export class OKXMCPClient {
    * 下单
    */
   async placeOrder(order: TradeOrder): Promise<OrderResult> {
-    const data = await this.post<any[]>('/api/v5/trade/order', order);
+    const data = await this.post<any[]>('/api/v5/trade/order', order as unknown as Record<string, unknown>);
     if (data && data[0]) {
       return {
         ordId: data[0].ordId,

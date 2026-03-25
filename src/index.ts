@@ -4,7 +4,7 @@
  */
 
 import 'dotenv/config';
-import { PPAlphaAgent, AgentConfig } from './agent/core.js';
+import { PPAlphaAgent, AgentConfig, AIProviderConfig } from './agent/core.js';
 import { PolymarketClient } from './polymarket/client.js';
 import { SignalGenerator } from './polymarket/signals.js';
 
@@ -21,11 +21,61 @@ function getEnvOrThrow(key: string): string {
   return value;
 }
 
+// AI模型配置 - 支持多种AI提供商
+let aiProvider: AIProviderConfig;
+if (process.env.OPENAI_API_KEY) {
+  // OpenAI 配置
+  aiProvider = {
+    type: 'openai',
+    apiKey: process.env.OPENAI_API_KEY,
+    baseUrl: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1',
+    model: process.env.OPENAI_MODEL || 'gpt-4o',
+  };
+} else if (process.env.ANTHROPIC_API_KEY) {
+  // Anthropic 配置
+  aiProvider = {
+    type: 'anthropic',
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    baseUrl: process.env.ANTHROPIC_BASE_URL,
+    model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929',
+  };
+} else if (process.env.TOGETHER_API_KEY) {
+  // Together AI 配置
+  aiProvider = {
+    type: 'together',
+    apiKey: process.env.TOGETHER_API_KEY,
+    baseUrl: 'https://api.together.xyz/v1',
+    model: process.env.TOGETHER_MODEL || 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+  };
+} else if (process.env.GROQ_API_KEY) {
+  // Groq 配置
+  aiProvider = {
+    type: 'groq',
+    apiKey: process.env.GROQ_API_KEY,
+    baseUrl: 'https://api.groq.com/openai/v1',
+    model: process.env.GROQ_MODEL || 'llama3-70b-8192',
+  };
+} else if (process.env.CUSTOM_AI_API_KEY) {
+  // 自定义AI提供商
+  aiProvider = {
+    type: 'custom',
+    apiKey: process.env.CUSTOM_AI_API_KEY,
+    baseUrl: process.env.CUSTOM_AI_BASE_URL || 'https://api.custom-ai-provider.com/v1',
+    model: process.env.CUSTOM_AI_MODEL || 'default-model',
+  };
+} else {
+  // 默认使用一个假的模型用于测试（不进行真正的API调用）
+  aiProvider = {
+    type: 'mock',
+    apiKey: 'mock-key',
+    baseUrl: 'http://localhost',
+    model: 'mock-model',
+  };
+}
+
 // 配置
 const config: AgentConfig = {
-  anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
-  anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL,
-  anthropicModel: process.env.ANTHROPIC_MODEL,
+  aiProvider: aiProvider,
   okxConfig: {
     apiKey: process.env.OKX_API_KEY || '',
     secretKey: process.env.OKX_SECRET_KEY || '',
@@ -58,7 +108,7 @@ console.log(`
 ║                                                           ║
 ║   Prediction-Powered Trading Agent                        ║
 ║   OKX AI Song Hackathon 2026                              ║
-║                                                           ║
+║   AI Provider: ${aiProvider.type.toUpperCase()}                                ║
 ╚═══════════════════════════════════════════════════════════╝
 `);
 
@@ -67,6 +117,7 @@ async function main() {
   console.log(`[Main] Simulated: ${config.okxConfig.simulated ? 'YES' : 'NO'}`);
   console.log(`[Main] Max Position: $${config.maxPositionSizeUSD}`);
   console.log(`[Main] Max Leverage: ${config.maxLeverage}x`);
+  console.log(`[Main] AI Provider: ${aiProvider.type}`);
   console.log('');
 
   switch (mode) {
