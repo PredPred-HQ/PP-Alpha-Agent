@@ -4,6 +4,9 @@
   "description": "PP-Alpha-Agent - Prediction-Powered Trading Agent for OKX AI Hackathon",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "pp-alpha": "./bin/pp-alpha.ts"
+  },
   "scripts": {
     "build": "tsc",
     "start": "tsx src/index.ts",
@@ -12,7 +15,10 @@
     "dev": "tsx watch src/index.ts",
     "test": "vitest",
     "test:trade": "tsx scripts/test-trade.ts",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "cli": "tsx bin/pp-alpha.ts",
+    "signal": "tsx bin/pp-alpha.ts signal scan",
+    "positions": "tsx bin/pp-alpha.ts trade positions"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.35.0",

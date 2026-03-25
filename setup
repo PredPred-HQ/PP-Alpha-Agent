@@ -1,0 +1,98 @@
+#!/bin/bash
+# PP-Alpha-Agent Setup Script
+# This script installs dependencies and links the CLI globally
+
+set -e
+
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║                   PP-Alpha-Agent Setup                      ║"
+echo "║         Prediction-Powered Trading Agent for OKX            ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+
+# Check Node.js
+if ! command -v node &> /dev/null; then
+    echo "Error: Node.js is required but not installed."
+    echo "Please install Node.js 18+ from https://nodejs.org"
+    exit 1
+fi
+
+NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    echo "Error: Node.js 18+ is required. Current version: $(node -v)"
+    exit 1
+fi
+
+echo "Node.js version: $(node -v) ✓"
+
+# Install dependencies
+echo ""
+echo "Installing dependencies..."
+if command -v pnpm &> /dev/null; then
+    pnpm install
+elif command -v npm &> /dev/null; then
+    npm install
+else
+    echo "Error: npm or pnpm is required"
+    exit 1
+fi
+
+echo ""
+echo "Dependencies installed ✓"
+
+# Make CLI executable
+chmod +x bin/pp-alpha.ts
+
+# Link CLI globally (optional)
+echo ""
+read -p "Link pp-alpha CLI globally? (y/n) " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    npm link
+    echo "CLI linked globally ✓"
+    echo "You can now use: pp-alpha signal scan"
+else
+    echo "Skipped global link. Use: npm run cli -- signal scan"
+fi
+
+# Check for .env
+echo ""
+if [ ! -f .env ]; then
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        echo "Created .env from .env.example"
+        echo "Please edit .env with your API credentials"
+    else
+        echo "Warning: No .env file found. Create one with your OKX credentials."
+    fi
+else
+    echo ".env file exists ✓"
+fi
+
+# Create skills symlink for Claude Code integration
+echo ""
+CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
+if [ -d "$CLAUDE_SKILLS_DIR" ]; then
+    SKILL_LINK="$CLAUDE_SKILLS_DIR/pp-alpha"
+    if [ ! -L "$SKILL_LINK" ]; then
+        ln -s "$(pwd)/skills" "$SKILL_LINK"
+        echo "Linked skills to Claude Code ✓"
+    else
+        echo "Skills already linked to Claude Code ✓"
+    fi
+fi
+
+echo ""
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║                    Setup Complete!                          ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+echo "Quick Start:"
+echo "  1. Edit .env with your OKX API credentials"
+echo "  2. pp-alpha signal scan         # Scan for trading signals"
+echo "  3. pp-alpha trade monitor       # Monitor mode"
+echo "  4. pp-alpha trade long BTC-USDT-SWAP --size 100"
+echo ""
+echo "For OpenClaw/Claude integration:"
+echo "  Skills are available at: $(pwd)/skills/"
+echo ""

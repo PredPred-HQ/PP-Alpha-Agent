@@ -154,6 +154,65 @@ pp-alpha-agent/
 - **AI 引擎**: 阿里百炼 Qwen (支持 OpenAI/Claude)
 - **语言**: TypeScript
 
+## Skills 模式 (OpenClaw / Claude Code 集成)
+
+PP-Alpha-Agent 支持 OKX Agent Skills 格式，可无缝集成到 OpenClaw、Claude Code 等 AI Agent 平台。
+
+### 安装
+
+```bash
+# 方式一：使用 setup 脚本
+./setup
+
+# 方式二：手动安装
+npm install
+npm link  # 全局安装 CLI
+```
+
+### 可用 Skills
+
+| Skill | 描述 |
+|-------|------|
+| `pp-alpha-signal` | 扫描预测市场，生成交易信号 |
+| `pp-alpha-trade` | 执行交易、管理仓位、设置止盈止损 |
+| `pp-alpha-market` | 获取 OKX 行情数据、账户余额 |
+
+### CLI 命令
+
+```bash
+# 信号扫描
+pp-alpha signal scan
+pp-alpha signal scan --min-confidence 80
+
+# 交易执行
+pp-alpha trade long BTC-USDT-SWAP --size 100 --leverage 3
+pp-alpha trade short ETH-USDT-SWAP --size 50 --leverage 2
+pp-alpha trade close BTC-USDT-SWAP --side long
+
+# 仓位管理
+pp-alpha trade positions
+pp-alpha trade set-tpsl BTC-USDT-SWAP --tp 95000 --sl 88000
+
+# 行情数据
+pp-alpha market ticker BTC-USDT
+pp-alpha market candles BTC-USDT --bar 1H
+pp-alpha market balance
+
+# 监控模式
+pp-alpha trade monitor
+```
+
+### 自然语言使用示例
+
+在 Claude Code 或 OpenClaw 中，你可以直接使用自然语言：
+
+```
+"扫描预测市场，找出高置信度的交易信号"
+"用 3 倍杠杆做多 100 USDT 的 BTC 合约"
+"查看我的 OKX 账户余额"
+"帮我设置 BTC 合约的止盈在 95000，止损在 88000"
+```
+
 ## API 参考
 
 ### Polymarket
@@ -171,3 +230,8 @@ MIT
 ## 团队
 
 PredP.red AI Operations Team
+
+## 参考资料文档
+
+* [AI松大赛](https://x.com/okxchinese/status/2031316969421787564)
+* [OKX Agent Trade Kit一键接入OpenClaw、Claude：零门槛教程🤖](https://x.com/okxchinese/status/2031332338270089605)
