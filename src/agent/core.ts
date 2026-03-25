@@ -9,7 +9,7 @@ import { SignalGenerator, PredictionSignal } from '../polymarket/signals.js';
 import { OKXMCPClient, OKXConfig } from '../okx/mcp-client.js';
 
 export interface AIProviderConfig {
-  type: 'anthropic' | 'openai' | 'together' | 'groq' | 'custom' | 'mock';
+  type: 'anthropic' | 'openai' | 'together' | 'groq' | 'dashscope' | 'custom' | 'mock';
   apiKey: string;
   baseUrl?: string;
   model: string;
@@ -63,15 +63,16 @@ export class PPAlphaAgent {
     switch (this.config.aiProvider.type) {
       case 'anthropic':
         return await this.callAnthropicAPI(prompt);
-        
+
       case 'openai':
       case 'together':
       case 'groq':
+      case 'dashscope':  // 阿里百炼使用 OpenAI 兼容格式
         return await this.callOpenAIAPI(prompt);
-        
+
       case 'custom':
         return await this.callCustomAPI(prompt);
-        
+
       case 'mock':
       default:
         // 模拟AI响应 - 根据信号特征生成合理的交易建议

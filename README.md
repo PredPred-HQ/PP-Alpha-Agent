@@ -15,7 +15,7 @@
 │                                                             │
 │  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐  │
 │  │ Polymarket  │ ───► │  AI Agent   │ ───► │    OKX      │  │
-│  │  预测市场   │      │  (Claude)   │      │  交易执行   │  │
+│  │  预测市场   │      │  (Qwen)     │      │  交易执行   │  │
 │  └─────────────┘      └─────────────┘      └─────────────┘  │
 │                                                             │
 │  • 市场情绪信号         • 信号分析           • 现货交易    │
@@ -47,9 +47,8 @@
 ### 环境要求
 
 - Node.js >= 18
-- Python >= 3.10
 - OKX API 密钥
-- Anthropic API 密钥
+- 阿里百炼 API 密钥 (或 OpenAI/Anthropic)
 
 ### 安装
 
@@ -63,29 +62,31 @@ npm install
 
 # 配置环境变量
 cp .env.example .env
-# 编辑 .env 填入你的 OKX API 密钥和 Anthropic API 配置
-OKX_API_KEY=your_api_key
-OKX_SECRET_KEY=your_secret_key
-OKX_PASSPHRASE=your_passphrase
-ANTHROPIC_API_KEY=your_anthropic_api_key
-ANTHROPIC_BASE_URL=https://api.anthropic.com  # Optional: custom API endpoint
-ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 ```
 
 ### 配置
 
 ```bash
 # .env 文件
+
+# OKX 交易所配置
 OKX_API_KEY=your_api_key
 OKX_SECRET_KEY=your_secret_key
 OKX_PASSPHRASE=your_passphrase
+OKX_SIMULATED=true  # 模拟交易模式
 
-# 可选：模拟交易模式
-OKX_SIMULATED=true
+# 阿里百炼 Qwen API (推荐)
+DASHSCOPE_API_KEY=your_dashscope_api_key
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+DASHSCOPE_MODEL=qwen-plus
 
-ANTHROPIC_API_KEY=your_anthropic_api_key
-ANTHROPIC_BASE_URL=https://api.anthropic.com  # Optional: custom API endpoint
-ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
+# 或使用 OpenAI
+# OPENAI_API_KEY=your_openai_api_key
+# OPENAI_MODEL=gpt-4o
+
+# 或使用 Anthropic Claude
+# ANTHROPIC_API_KEY=your_anthropic_api_key
+# ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 ```
 
 ### 运行
@@ -149,9 +150,9 @@ pp-alpha-agent/
 ## 技术栈
 
 - **数据源**: Polymarket Gamma API + CLOB API
-- **交易执行**: OKX Agent Trade Kit (MCP)
-- **AI 引擎**: Claude API
-- **语言**: TypeScript / Python
+- **交易执行**: OKX REST API (模拟/实盘)
+- **AI 引擎**: 阿里百炼 Qwen (支持 OpenAI/Claude)
+- **语言**: TypeScript
 
 ## API 参考
 

@@ -395,9 +395,13 @@ export class OKXMCPClient {
     slTriggerPx?: string;
     slOrdPx?: string;
   }): Promise<{ algoId: string }> {
+    // 多头平仓用 sell，空头平仓用 buy
+    const side = params.posSide === 'long' ? 'sell' : 'buy';
+
     const data = await this.post<any[]>('/api/v5/trade/order-algo', {
       instId: params.instId,
       tdMode: 'cross',
+      side: side,
       posSide: params.posSide,
       ordType: 'conditional',
       sz: '0', // 全部持仓

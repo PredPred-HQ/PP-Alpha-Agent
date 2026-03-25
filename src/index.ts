@@ -23,7 +23,15 @@ function getEnvOrThrow(key: string): string {
 
 // AI模型配置 - 支持多种AI提供商
 let aiProvider: AIProviderConfig;
-if (process.env.OPENAI_API_KEY) {
+if (process.env.DASHSCOPE_API_KEY) {
+  // 阿里百炼 Qwen 配置 (OpenAI 兼容格式)
+  aiProvider = {
+    type: 'dashscope',
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseUrl: process.env.DASHSCOPE_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    model: process.env.DASHSCOPE_MODEL || 'qwen-plus',
+  };
+} else if (process.env.OPENAI_API_KEY) {
   // OpenAI 配置
   aiProvider = {
     type: 'openai',
